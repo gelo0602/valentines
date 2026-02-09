@@ -73,37 +73,35 @@
   </div>
 
   <script>
-    const yesBtn = document.getElementById('yesBtn');
-    const noBtn = document.getElementById('noBtn');
-    const message = document.getElementById('message');
+  const yesBtn = document.getElementById('yesBtn');
+  const noBtn = document.getElementById('noBtn');
+  const message = document.getElementById('message');
 
-    let yesScale = 1;
-    let noScale = 1;
+  let yesScale = 1;
+  let clickCount = 0;
 
-    noBtn.addEventListener('click', () => {
-      yesScale += 0.3;              // YES grows
-      noScale -= 0.2;               // NO shrinks
+  // Make the YES button grow when clicked
+  yesBtn.addEventListener('click', () => {
+    clickCount++;
 
-      yesBtn.style.transform = scale(${yesScale});
-      noBtn.style.transform = scale(${Math.max(noScale, 0)});
-
-      // Move NO slightly behind YES to look "consumed"
-      noBtn.style.zIndex = 0;
-      yesBtn.style.zIndex = 2;
-
-      if (noScale <= 0.2) {
-        noBtn.style.opacity = 0;
-        noBtn.disabled = true;
-        message.textContent = "You can't escape it anymore 😌";
-      } else {
-        message.textContent = "Are you suuuure? 😏";
-      }
-    });
-
-    yesBtn.addEventListener('click', () => {
+    if (clickCount < 4) {
+      yesScale += 0.5; // Increases size
+      yesBtn.style.transform = `scale(${yesScale})`;
+      message.textContent = "Are you sure? Click again! 🥰";
+    } else {
+      // Final state after a few clicks
       document.querySelector('.buttons').innerHTML = "";
       message.innerHTML = "💘 Thank you for being my Valentine! 💘<br>Can't wait to make memories with you 🥰";
-    });
-  </script>
+    }
+  });
+
+  // Optional: Keep the No button shrinking logic
+  noBtn.addEventListener('click', () => {
+    yesScale += 0.3;
+    yesBtn.style.transform = `scale(${yesScale})`;
+    message.textContent = "Wrong button! Try the big one. 😏";
+  });
+</script>
 </body>
+
 </html>
