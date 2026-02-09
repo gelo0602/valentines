@@ -14,27 +14,28 @@
       justify-content: center;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
       font-family: Arial, sans-serif;
+      overflow: hidden;
     }
     .card {
       background: #fff;
-      padding: 2rem;
+      padding: 2.5rem;
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-      max-width: 90%;
-      overflow: hidden;
+      max-width: 400px;
+      width: 90%;
     }
     h1 {
       margin-bottom: 1.5rem;
       color: #ff4d6d;
     }
     .buttons {
-      position: relative;
-      height: 120px;
       display: flex;
+      flex-direction: column; /* Stacked to handle massive growth better */
       align-items: center;
       justify-content: center;
-      gap: 1rem;
+      gap: 20px;
+      min-height: 250px; /* Space for the button to grow */
     }
     button {
       border: none;
@@ -42,13 +43,12 @@
       padding: 0.8rem 1.5rem;
       font-size: 1.1rem;
       cursor: pointer;
-      transition: all 0.4s ease;
-      position: relative;
-      z-index: 1;
+      transition: transform 0.2s ease; /* Faster response */
     }
     #yesBtn {
       background: #ff4d6d;
       color: #fff;
+      z-index: 10;
     }
     #noBtn {
       background: #e0e0e0;
@@ -56,9 +56,9 @@
     }
     .message {
       margin-top: 1.5rem;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       color: #333;
-      min-height: 1.5em;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -73,35 +73,35 @@
   </div>
 
   <script>
-  const yesBtn = document.getElementById('yesBtn');
-  const noBtn = document.getElementById('noBtn');
-  const message = document.getElementById('message');
+    document.addEventListener('DOMContentLoaded', () => {
+      const yesBtn = document.getElementById('yesBtn');
+      const noBtn = document.getElementById('noBtn');
+      const message = document.getElementById('message');
+      const btnContainer = document.querySelector('.buttons');
 
-  let yesScale = 1;
-  let clickCount = 0;
+      let yesScale = 1;
 
-  // Make the YES button grow when clicked
-  yesBtn.addEventListener('click', () => {
-    clickCount++;
+      // When they click NO, the YES button gets bigger
+      noBtn.addEventListener('click', () => {
+        yesScale += 0.4;
+        yesBtn.style.transform = `scale(${yesScale})`;
+        message.textContent = "Try again... the other button! 😉";
+      });
 
-    if (clickCount < 4) {
-      yesScale += 0.5; // Increases size
-      yesBtn.style.transform = `scale(${yesScale})`;
-      message.textContent = "Are you sure? Click again! 🥰";
-    } else {
-      // Final state after a few clicks
-      document.querySelector('.buttons').innerHTML = "";
-      message.innerHTML = "💘 Thank you for being my Valentine! 💘<br>Can't wait to make memories with you 🥰";
-    }
-  });
-
-  // Optional: Keep the No button shrinking logic
-  noBtn.addEventListener('click', () => {
-    yesScale += 0.3;
-    yesBtn.style.transform = `scale(${yesScale})`;
-    message.textContent = "Wrong button! Try the big one. 😏";
-  });
-</script>
+      // When they click YES, it grows even more until the final message
+      yesBtn.addEventListener('click', () => {
+        if (yesScale < 3) {
+          yesScale += 1.5;
+          yesBtn.style.transform = `scale(${yesScale})`;
+          message.textContent = "REALLY?! Click it again! 😍";
+        } else {
+          // The final "Success" state
+          btnContainer.innerHTML = ""; 
+          message.innerHTML = "💘 SUCCESS! 💘<br>I knew you couldn't resist!";
+          document.body.style.backgroundColor = "#ff4d6d";
+        }
+      });
+    });
+  </script>
 </body>
-
 </html>
